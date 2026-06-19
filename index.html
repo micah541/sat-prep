@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAT Prep</title>
+<style>
+:root {
+  --blue:#1a56db; --blue-light:#e8f0fe; --blue-dark:#1e3a8a;
+  --green:#059669; --green-light:#d1fae5;
+  --red:#dc2626; --red-light:#fee2e2;
+  --yellow:#d97706; --yellow-light:#fef3c7;
+  --gray-50:#f9fafb; --gray-100:#f3f4f6; --gray-200:#e5e7eb;
+  --gray-400:#9ca3af; --gray-600:#4b5563; --gray-700:#374151; --gray-800:#1f2937;
+  --white:#fff;
+  --shadow:0 1px 3px rgba(0,0,0,.1);
+  --shadow-md:0 4px 6px rgba(0,0,0,.07);
+  --r:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--gray-50);color:var(--gray-800);min-height:100vh}
+.screen{display:none}.screen.active{display:block}
+
+nav{background:var(--white);border-bottom:1px solid var(--gray-200);padding:0 20px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:var(--shadow)}
+.nav-logo{font-size:20px;font-weight:800;color:var(--blue)}.nav-logo span{color:var(--gray-800)}
+.nav-links{display:flex;gap:4px}
+.nav-btn{background:none;border:none;padding:7px 14px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:500;color:var(--gray-600);transition:all .15s}
+.nav-btn:hover{background:var(--gray-100);color:var(--gray-800)}
+
+.container{max-width:860px;margin:0 auto;padding:28px 20px}
+
+/* HOME */
+.hero{text-align:center;padding:52px 20px 36px}
+.hero h1{font-size:38px;font-weight:800;margin-bottom:12px}
+.hero p{font-size:17px;color:var(--gray-600);max-width:480px;margin:0 auto 36px}
+.home-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin-bottom:24px}
+.home-card{background:var(--white);border-radius:var(--r);padding:28px;box-shadow:var(--shadow);border:1px solid var(--gray-200);cursor:pointer;transition:all .2s;text-align:left}
+.home-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.home-card .icon{font-size:36px;margin-bottom:14px}
+.home-card h3{font-size:18px;font-weight:700;margin-bottom:6px}
+.home-card p{font-size:14px;color:var(--gray-600);line-height:1.5}
+
+/* SECTION SELECT */
+.page-title{font-size:24px;font-weight:700;margin-bottom:4px}
+.page-sub{font-size:15px;color:var(--gray-600);margin-bottom:24px}
+.section-tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.stab{padding:8px 20px;border-radius:20px;border:2px solid var(--gray-200);background:var(--white);cursor:pointer;font-size:14px;font-weight:600;color:var(--gray-600);transition:all .15s}
+.stab:hover{border-color:var(--blue)}
+.stab.m{border-color:#1e40af;background:#dbeafe;color:#1e40af}
+.stab.r{border-color:#9d174d;background:#fce7f3;color:#9d174d}
+.topic-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;margin-bottom:28px}
+.topic-card{background:var(--white);border:2px solid var(--gray-200);border-radius:var(--r);padding:18px;cursor:pointer;transition:all .15s}
+.topic-card:hover{border-color:var(--blue);background:var(--blue-light)}
+.topic-card.sel{border-color:var(--blue);background:var(--blue-light)}
+.topic-tag{display:inline-block;font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px;margin-bottom:8px}
+.tag-m{background:#dbeafe;color:#1e40af}.tag-r{background:#fce7f3;color:#9d174d}
+.topic-card h4{font-size:15px;font-weight:600;margin-bottom:3px}
+.topic-card small{color:var(--gray-600);font-size:13px}
+
+/* TEST MODE CARDS */
+.test-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:28px}
+.test-card{background:var(--white);border-radius:var(--r);padding:28px;box-shadow:var(--shadow);border:2px solid var(--gray-200);cursor:pointer;transition:all .2s}
+.test-card:hover{border-color:var(--blue);box-shadow:var(--shadow-md)}
+.test-card h3{font-size:17px;font-weight:700;margin-bottom:8px}
+.test-card p{font-size:13px;color:var(--gray-600);line-height:1.5}
+.test-card .meta{margin-top:12px;font-size:13px;font-weight:600;color:var(--blue)}
+
+/* QUIZ */
+.quiz-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px}
+.quiz-meta{display:flex;align-items:center;gap:14px}
+.quiz-topic{font-size:13px;font-weight:700;color:var(--blue);background:var(--blue-light);padding:4px 12px;border-radius:20px}
+.quiz-counter{font-size:14px;color:var(--gray-600)}
+.timer{background:var(--gray-800);color:var(--white);padding:6px 16px;border-radius:20px;font-size:15px;font-weight:700;font-family:monospace;letter-spacing:1px}
+.timer.urgent{background:var(--red);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.pbar{height:6px;background:var(--gray-200);border-radius:3px;margin-bottom:24px;overflow:hidden}
+.pfill{height:100%;background:var(--blue);border-radius:3px;transition:width .3s}
+.qcard{background:var(--white);border-radius:var(--r);padding:28px;box-shadow:var(--shadow);border:1px solid var(--gray-200);margin-bottom:18px}
+.passage{background:var(--gray-50);border-left:4px solid var(--blue);padding:16px 20px;border-radius:0 8px 8px 0;margin-bottom:18px;font-size:15px;line-height:1.75;color:var(--gray-700)}
+.qtext{font-size:17px;line-height:1.6;font-weight:500;margin-bottom:20px;white-space:pre-line}
+.choices{display:flex;flex-direction:column;gap:10px}
+.choice{display:flex;align-items:flex-start;gap:14px;padding:14px 18px;border:2px solid var(--gray-200);border-radius:10px;cursor:pointer;background:var(--white);text-align:left;font-size:15px;line-height:1.5;transition:all .15s;width:100%}
+.choice:hover:not(:disabled){border-color:var(--blue);background:var(--blue-light)}
+.choice-lbl{min-width:26px;height:26px;border-radius:50%;background:var(--gray-100);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0}
+.choice.correct{border-color:var(--green);background:var(--green-light)}
+.choice.correct .choice-lbl{background:var(--green);color:#fff}
+.choice.wrong{border-color:var(--red);background:var(--red-light)}
+.choice.wrong .choice-lbl{background:var(--red);color:#fff}
+.choice.selected-test{border-color:var(--blue);background:var(--blue-light)}
+.choice.selected-test .choice-lbl{background:var(--blue);color:#fff}
+.choice:disabled{cursor:default}
+.expl{margin-top:16px;padding:14px 18px;background:var(--blue-light);border-radius:10px;border-left:4px solid var(--blue);font-size:14px;line-height:1.6;color:var(--gray-700);display:none}
+.expl.show{display:block}
+.quiz-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:4px}
+
+/* BUTTONS */
+.btn{padding:10px 24px;border-radius:8px;border:none;cursor:pointer;font-size:15px;font-weight:600;transition:all .15s}
+.btn-primary{background:var(--blue);color:#fff}.btn-primary:hover{background:var(--blue-dark)}
+.btn-secondary{background:var(--gray-100);color:var(--gray-700)}.btn-secondary:hover{background:var(--gray-200)}
+.btn-lg{padding:13px 32px;font-size:16px;border-radius:10px}
+.btn-outline{background:#fff;border:2px solid var(--blue);color:var(--blue)}.btn-outline:hover{background:var(--blue-light)}
+
+/* RESULTS */
+.results-top{background:var(--white);border-radius:var(--r);padding:40px;box-shadow:var(--shadow-md);text-align:center;margin-bottom:20px}
+.score-ring{width:120px;height:120px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 18px;border:8px solid}
+.ring-great{border-color:var(--green);color:var(--green)}
+.ring-good{border-color:var(--blue);color:var(--blue)}
+.ring-ok{border-color:var(--yellow);color:var(--yellow)}
+.ring-low{border-color:var(--red);color:var(--red)}
+.score-pct{font-size:30px;font-weight:800}
+.score-frac{font-size:12px;font-weight:600;opacity:.75}
+.result-breakdown{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0}
+.rb-item{background:var(--gray-50);border-radius:10px;padding:14px;text-align:center}
+.rb-num{font-size:28px;font-weight:800}
+.rb-lbl{font-size:11px;color:var(--gray-600);margin-top:2px}
+.c-num{color:var(--green)}.w-num{color:var(--red)}.s-num{color:var(--gray-400)}
+.result-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:20px}
+
+/* REVIEW */
+.review-item{background:var(--white);border-radius:var(--r);padding:22px;box-shadow:var(--shadow);border:1px solid var(--gray-200);margin-bottom:14px}
+.review-item.ri-correct{border-left:4px solid var(--green)}
+.review-item.ri-wrong{border-left:4px solid var(--red)}
+.review-item.ri-skip{border-left:4px solid var(--gray-400)}
+.review-badge{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px;margin-bottom:10px}
+.rb-correct{background:var(--green-light);color:var(--green)}
+.rb-wrong{background:var(--red-light);color:var(--red)}
+.rb-skip{background:var(--gray-100);color:var(--gray-600)}
+.review-q{font-size:15px;font-weight:500;margin-bottom:10px;white-space:pre-line}
+.review-answers{font-size:13px;color:var(--gray-600);margin-bottom:8px}
+.review-expl{font-size:13px;color:var(--gray-700);background:var(--blue-light);border-radius:8px;padding:10px 14px;line-height:1.6}
+
+/* DASHBOARD */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:24px}
+.stat-card{background:var(--white);border-radius:var(--r);padding:20px;box-shadow:var(--shadow);border:1px solid var(--gray-200)}
+.stat-num{font-size:32px;font-weight:800;color:var(--blue)}
+.stat-lbl{font-size:13px;color:var(--gray-600);margin-top:3px}
+.hist-item{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:var(--white);border-radius:10px;border:1px solid var(--gray-200);margin-bottom:8px}
+.hist-info{flex:1}
+.hist-topic{font-size:14px;font-weight:600}
+.hist-date{font-size:12px;color:var(--gray-400);margin-top:2px}
+.hist-score{font-size:15px;font-weight:700;padding:4px 14px;border-radius:20px}
+.hs-great{background:var(--green-light);color:var(--green)}
+.hs-good{background:var(--blue-light);color:var(--blue)}
+.hs-ok{background:var(--yellow-light);color:var(--yellow)}
+.hs-low{background:var(--red-light);color:var(--red)}
+
+.empty{text-align:center;padding:60px 20px;color:var(--gray-400)}
+.empty .e-icon{font-size:48px;margin-bottom:12px}
+.empty p{font-size:16px}
+
+.section-hdr{font-size:18px;font-weight:700;margin:28px 0 14px;padding-bottom:8px;border-bottom:2px solid var(--gray-200)}
+
+@media(max-width:600px){
+  .hero h1{font-size:28px}
+  .qcard{padding:18px}
+  .results-top{padding:24px}
+  .result-breakdown{grid-template-columns:repeat(3,1fr)}
+  nav{padding:0 12px}
+  .nav-logo{font-size:17px}
+  .container{padding:16px 12px}
+  .score-pct{font-size:24px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">SAT <span>Prep</span></div>
+  <div class="nav-links">
+    <button class="nav-btn" onclick="goHome()">Home</button>
+    <button class="nav-btn" onclick="goPractice()">Practice</button>
+    <button class="nav-btn" onclick="goTest()">Test Mode</button>
+    <button class="nav-btn" onclick="goDashboard()">Progress</button>
+  </div>
+</nav>
+
+<div id="screen-home" class="screen active"></div>
+<div id="screen-select" class="screen"></div>
+<div id="screen-quiz" class="screen"></div>
+<div id="screen-results" class="screen"></div>
+<div id="screen-dashboard" class="screen"></div>
+
+<script>
+// ─── QUESTION BANK ───────────────────────────────────────────────────────────
+const Q = [
+  // MATH › ALGEBRA
+  {id:1,section:'math',topic:'Algebra',passage:null,
+   q:'If 3x + 7 = 22, what is the value of x?',
+   choices:['3','5','7','15'],ans:1,
+   expl:'Subtract 7: 3x = 15. Divide by 3: x = 5.'},
+  {id:2,section:'math',topic:'Algebra',passage:null,
+   q:'Which expression is equivalent to 2(x + 3) − 4(x − 1)?',
+   choices:['−2x + 10','2x + 2','−2x + 2','6x + 10'],ans:0,
+   expl:'Distribute: 2x + 6 − 4x + 4 = −2x + 10.'},
+  {id:3,section:'math',topic:'Algebra',passage:null,
+   q:'A line passes through (0, −4) with slope 2/3. What is its equation?',
+   choices:['y = 2/3 x + 4','y = 3/2 x − 4','y = 2/3 x − 4','y = −2/3 x − 4'],ans:2,
+   expl:'Slope-intercept form y = mx + b with m = 2/3 and b = −4.'},
+  {id:4,section:'math',topic:'Algebra',passage:null,
+   q:'If f(x) = 3x² − 2x + 1, what is f(−2)?',
+   choices:['9','17','13','5'],ans:1,
+   expl:'f(−2) = 3(4) − 2(−2) + 1 = 12 + 4 + 1 = 17.'},
+  {id:5,section:'math',topic:'Algebra',passage:null,
+   q:'A store sells pencils for $0.30 each and pens for $1.50 each. A student buys 10 items total and spends $9.00. How many pens did the student buy?',
+   choices:['3','4','5','6'],ans:2,
+   expl:'Let p = pens. 1.50p + 0.30(10−p) = 9 → 1.20p = 6 → p = 5.'},
+  {id:6,section:'math',topic:'Algebra',passage:null,
+   q:'What are the solutions to x² − 5x + 6 = 0?',
+   choices:['x = 1 and x = 6','x = 2 and x = 3','x = −2 and x = −3','x = −1 and x = 6'],ans:1,
+   expl:'Factor: (x − 2)(x − 3) = 0. So x = 2 or x = 3.'},
+  {id:7,section:'math',topic:'Algebra',passage:null,
+   q:'If 2x − y = 8 and x + y = 7, what is the value of x?',
+   choices:['3','4','5','6'],ans:2,
+   expl:'Add the two equations: 3x = 15 → x = 5.'},
+  {id:8,section:'math',topic:'Algebra',passage:null,
+   q:'Which values of x satisfy |2x − 3| = 7?',
+   choices:['x = 5 only','x = −2 only','x = 5 or x = −2','x = 2 or x = 5'],ans:2,
+   expl:'Case 1: 2x − 3 = 7 → x = 5. Case 2: 2x − 3 = −7 → x = −2.'},
+  {id:9,section:'math',topic:'Algebra',passage:null,
+   q:'The function g(x) = −2x + 6 intersects the x-axis at which point?',
+   choices:['(3, 0)','(0, 3)','(6, 0)','(0, 6)'],ans:0,
+   expl:'Set g(x) = 0: −2x + 6 = 0 → x = 3. The x-intercept is (3, 0).'},
+  {id:10,section:'math',topic:'Algebra',passage:null,
+   q:'A car rental charges $40/day plus $0.15/mile. Which inequality represents spending at most $70 in one day?',
+   choices:['40 + 0.15m ≤ 70','40 + 0.15m ≥ 70','0.15m ≤ 70','40m + 0.15 ≤ 70'],ans:0,
+   expl:'Total cost = 40 + 0.15m. "At most $70" means ≤ 70.'},
+
+  // MATH › ADVANCED MATH
+  {id:11,section:'math',topic:'Advanced Math',passage:null,
+   q:'Which expression is equivalent to (x² − 9) ÷ (x − 3), where x ≠ 3?',
+   choices:['x + 3','x − 3','x² + 3','(x+3)(x−3)'],ans:0,
+   expl:'Factor the numerator: x² − 9 = (x+3)(x−3). Cancel (x−3) to get x + 3.'},
+  {id:12,section:'math',topic:'Advanced Math',passage:null,
+   q:'If x² + bx + 16 is a perfect square trinomial, what is a possible value of b?',
+   choices:['4','8','12','16'],ans:1,
+   expl:'(x + 4)² = x² + 8x + 16, so b = 8.'},
+  {id:13,section:'math',topic:'Advanced Math',passage:null,
+   q:'The graph of y = (x − 2)² + 3 has its vertex at which point?',
+   choices:['(−2, 3)','(2, −3)','(2, 3)','(−2, −3)'],ans:2,
+   expl:'Vertex form y = (x − h)² + k has vertex (h, k). Here (h, k) = (2, 3).'},
+  {id:14,section:'math',topic:'Advanced Math',passage:null,
+   q:'What is the sum of the solutions to 2x² − 8x + 6 = 0?',
+   choices:['2','3','4','6'],ans:2,
+   expl:"By Vieta's formulas, sum = −(−8)/2 = 4. (Or factor: (x−1)(x−3)=0, sum = 1+3 = 4.)"},
+  {id:15,section:'math',topic:'Advanced Math',passage:null,
+   q:'If h(x) = x³ − 4x, how many distinct real values of x satisfy h(x) = 0?',
+   choices:['1','2','3','4'],ans:2,
+   expl:'h(x) = x(x²−4) = x(x+2)(x−2) = 0. Three solutions: x = 0, 2, −2.'},
+  {id:16,section:'math',topic:'Advanced Math',passage:null,
+   q:'Which function has a vertical asymptote at x = 3?',
+   choices:['f(x) = x/(x+3)','f(x) = (x−3)/x','f(x) = x/(x−3)','f(x) = 3/x'],ans:2,
+   expl:'Vertical asymptote where denominator = 0. For x/(x−3), denominator = 0 when x = 3.'},
+  {id:17,section:'math',topic:'Advanced Math',passage:null,
+   q:'If 4ˣ = 8, what is the value of x?',
+   choices:['1','3/2','2','2/3'],ans:1,
+   expl:'4ˣ = (2²)ˣ = 2²ˣ. Since 8 = 2³, we have 2x = 3 → x = 3/2.'},
+  {id:18,section:'math',topic:'Advanced Math',passage:null,
+   q:'For 2x² − 4x + k = 0 to have exactly one real solution, k must equal:',
+   choices:['1','2','4','8'],ans:1,
+   expl:'Discriminant b² − 4ac = 0: (−4)² − 4(2)(k) = 0 → 16 − 8k = 0 → k = 2.'},
+  {id:19,section:'math',topic:'Advanced Math',passage:null,
+   q:'Which expression is equivalent to (2x³y²)³?',
+   choices:['6x⁶y⁵','8x⁶y⁶','8x⁹y⁶','6x⁹y⁶'],ans:2,
+   expl:'(2x³y²)³ = 2³ · x^(3·3) · y^(2·3) = 8x⁹y⁶.'},
+  {id:20,section:'math',topic:'Advanced Math',passage:null,
+   q:'If log₂(x) = 5, what is the value of x?',
+   choices:['10','16','25','32'],ans:3,
+   expl:'log₂(x) = 5 means 2⁵ = x. Since 2⁵ = 32, x = 32.'},
+
+  // MATH › PROBLEM SOLVING & DATA
+  {id:21,section:'math',topic:'Problem Solving & Data',passage:null,
+   q:'A survey of 200 students found that 60% prefer pizza over burgers. How many students prefer pizza?',
+   choices:['60','80','120','140'],ans:2,
+   expl:'60% of 200 = 0.60 × 200 = 120.'},
+  {id:22,section:'math',topic:'Problem Solving & Data',passage:null,
+   q:'The mean of five numbers is 14. Four of them are 10, 12, 16, and 18. What is the fifth number?',
+   choices:['12','13','14','15'],ans:2,
+   expl:'Total sum = 14 × 5 = 70. Known sum = 10+12+16+18 = 56. Fifth = 70 − 56 = 14.'},
+  {id:23,section:'math',topic:'Problem Solving & Data',passage:null,
+   q:'A scatterplot shows a strong positive correlation between hours studied and test scores. Which conclusion is most appropriate?',
+   choices:['Studying more causes higher test scores.','Students who study more tend to score higher.','Test scores determine how long students study.','There is no relationship between study time and scores.'],ans:1,
+   expl:'Correlation ≠ causation. We can only say the two variables tend to increase together.'},
+  {id:24,section:'math',topic:'Problem Solving & Data',passage:null,
+   q:'A data set contains: 3, 7, 7, 9, 14. What is the median?',
+   choices:['7','8','9','14'],ans:0,
+   expl:'Ordered: 3, 7, 7, 9, 14. The middle value (3rd of 5) is 7.'},
+  {id:25,section:'math',topic:'Problem Solving & Data',passage:null,
+   q:'A recipe uses flour and sugar in a ratio of 5:2. If you use 15 cups of flour, how many cups of sugar are needed?',
+   choices:['4','6','7.5','8'],ans:1,
+   expl:'Scale factor: 15 ÷ 5 = 3. Sugar = 2 × 3 = 6 cups.'},
+  {id:26,section:'math',topic:'Problem Solving & Data',passage:null,
+   q:'A population of bacteria doubles every 3 hours. Starting with 500, how many are there after 9 hours?',
+   choices:['1,500','2,000','4,000','8,000'],ans:2,
+   expl:'500 × 2³ = 500 × 8 = 4,000. (Doubles at 3h→1,000; 6h→2,000; 9h→4,000.)'},
+  {id:27,section:'math',topic:'Problem Solving & Data',passage:null,
+   q:'In a class of 30, 18 play sports and 12 play an instrument. If 6 do both, how many do neither?',
+   choices:['0','3','6','9'],ans:2,
+   expl:'At least one activity = 18 + 12 − 6 = 24 (inclusion-exclusion). Neither = 30 − 24 = 6.'},
+  {id:28,section:'math',topic:'Problem Solving & Data',passage:null,
+   q:'If the probability of rain on any day is 0.3, what is the probability of no rain on two consecutive days?',
+   choices:['0.09','0.49','0.60','0.70'],ans:1,
+   expl:'P(no rain one day) = 0.7. P(no rain both days) = 0.7 × 0.7 = 0.49.'},
+
+  // MATH › GEOMETRY & TRIG
+  {id:29,section:'math',topic:'Geometry & Trig',passage:null,
+   q:'A right triangle has legs of length 6 and 8. What is the length of the hypotenuse?',
+   choices:['7','10','12','14'],ans:1,
+   expl:'c² = 6² + 8² = 36 + 64 = 100. c = 10. (Classic 6-8-10 triple.)'},
+  {id:30,section:'math',topic:'Geometry & Trig',passage:null,
+   q:'A circle has a radius of 5. What is its area?',
+   choices:['10π','25π','50π','100π'],ans:1,
+   expl:'Area = πr² = π(5²) = 25π.'},
+  {id:31,section:'math',topic:'Geometry & Trig',passage:null,
+   q:'In a right triangle, sin(θ) = 3/5. What is cos(θ)?',
+   choices:['3/4','4/5','4/3','5/3'],ans:1,
+   expl:'Opposite = 3, hypotenuse = 5 → adjacent = √(25−9) = 4. cos(θ) = 4/5.'},
+  {id:32,section:'math',topic:'Geometry & Trig',passage:null,
+   q:'Two parallel lines are cut by a transversal. One angle is 65°. What is the co-interior (same-side interior) angle?',
+   choices:['65°','115°','125°','25°'],ans:1,
+   expl:'Co-interior angles are supplementary: 180° − 65° = 115°.'},
+  {id:33,section:'math',topic:'Geometry & Trig',passage:null,
+   q:'A rectangle has perimeter 36 and a length that is twice its width. What is the area?',
+   choices:['36','48','72','108'],ans:2,
+   expl:'2(2w + w) = 36 → w = 6, l = 12. Area = 12 × 6 = 72.'},
+  {id:34,section:'math',topic:'Geometry & Trig',passage:null,
+   q:'What is the volume of a cylinder with radius 3 and height 4?',
+   choices:['12π','24π','36π','48π'],ans:2,
+   expl:'V = πr²h = π × 9 × 4 = 36π.'},
+  {id:35,section:'math',topic:'Geometry & Trig',passage:null,
+   q:'The point (3, −5) is reflected over the x-axis. What are the coordinates of the image?',
+   choices:['(−3, −5)','(3, 5)','(−3, 5)','(5, −3)'],ans:1,
+   expl:'Reflecting over the x-axis negates the y-coordinate: (3, −5) → (3, 5).'},
+
+  // R&W › VOCABULARY IN CONTEXT
+  {id:36,section:'rw',topic:'Vocabulary in Context',
+   passage:'The scientist\'s hypothesis was considered audacious by her peers, who doubted that such a bold claim could ever be proven with existing technology.',
+   q:'As used in the passage, "audacious" most nearly means:',
+   choices:['cautious','daring','mistaken','complicated'],ans:1,
+   expl:'"Bold claim" in the passage confirms audacious means daring or bold. The peers\' doubt reinforces how ambitious the claim was.'},
+  {id:37,section:'rw',topic:'Vocabulary in Context',
+   passage:'The council\'s decision to reroute the highway was contentious, sparking protests from both environmental groups and local business owners.',
+   q:'As used in the passage, "contentious" most nearly means:',
+   choices:['popular','surprising','controversial','beneficial'],ans:2,
+   expl:'When a decision sparks protests from multiple opposing groups, it is controversial — causing strong disagreement.'},
+  {id:38,section:'rw',topic:'Vocabulary in Context',
+   passage:'Although the author was prolific, producing over forty novels in thirty years, critics noted that quality varied widely across her body of work.',
+   q:'As used in the passage, "prolific" most nearly means:',
+   choices:['popular','skilled','highly productive','well-known'],ans:2,
+   expl:'Forty novels in thirty years demonstrates that prolific means highly productive — generating a large amount of work.'},
+  {id:39,section:'rw',topic:'Vocabulary in Context',
+   passage:'The ephemeral nature of social media trends means that viral moments are usually forgotten within days, replaced immediately by the next wave of content.',
+   q:'As used in the passage, "ephemeral" most nearly means:',
+   choices:['dangerous','entertaining','short-lived','widespread'],ans:2,
+   expl:'"Forgotten within days" signals that ephemeral means lasting only a brief time — short-lived.'},
+  {id:40,section:'rw',topic:'Vocabulary in Context',
+   passage:'The new principal took a more pragmatic approach, focusing on what could realistically be achieved within the school\'s limited budget rather than pursuing grand, expensive plans.',
+   q:'As used in the passage, "pragmatic" most nearly means:',
+   choices:['idealistic','strict','practical','creative'],ans:2,
+   expl:'"Realistically achieved within limited resources" shows pragmatic means practical, focused on what actually works.'},
+  {id:41,section:'rw',topic:'Vocabulary in Context',
+   passage:'Her tone in the meeting was conciliatory — she offered concessions, acknowledged opposing viewpoints, and sought common ground rather than escalating the disagreement.',
+   q:'As used in the passage, "conciliatory" most nearly means:',
+   choices:['aggressive','bored','peacemaking','dismissive'],ans:2,
+   expl:'Offering concessions and seeking common ground describes a conciliatory (peacemaking) approach — the opposite of escalating conflict.'},
+  {id:42,section:'rw',topic:'Vocabulary in Context',
+   passage:'The historian argued that the treaty was a pivotal moment — not merely significant, but the turning point upon which the entire outcome of the war hinged.',
+   q:'As used in the passage, "pivotal" most nearly means:',
+   choices:['lengthy','debated','a crucial turning point','unexpected'],ans:2,
+   expl:'"The turning point upon which everything hinged" restates what pivotal means — a decisive, critical moment.'},
+  {id:43,section:'rw',topic:'Vocabulary in Context',
+   passage:'The athlete remained resilient after her injury, refusing to abandon her goals; she returned to competition within six weeks.',
+   q:'As used in the passage, "resilient" most nearly means:',
+   choices:['famous','determined','able to recover quickly','highly skilled'],ans:2,
+   expl:'Returning to competition quickly after injury shows resilience — the ability to bounce back from setbacks. "Determined" is related but doesn\'t capture the recovery aspect.'},
+
+  // R&W › GRAMMAR & CONVENTIONS
+  {id:44,section:'rw',topic:'Grammar & Conventions',passage:null,
+   q:'Which version is grammatically correct?',
+   choices:['Each of the students are responsible for their own project.','Each of the students is responsible for their own project.','Each of the students are responsible for his own project.','Each of the students were responsible for their projects.'],ans:1,
+   expl:'"Each" is singular and requires a singular verb ("is"). "Their" is accepted as a singular gender-neutral pronoun.'},
+  {id:45,section:'rw',topic:'Grammar & Conventions',passage:null,
+   q:'Which sentence is correctly punctuated?',
+   choices:['My favorite foods are pizza, pasta and, salad.','My favorite foods are pizza, pasta, and salad.','My favorite foods are pizza pasta, and salad.','My favorite foods are: pizza, pasta, and salad.'],ans:1,
+   expl:'A list of three or more items requires a comma after each item. No colon is needed after "are."'},
+  {id:46,section:'rw',topic:'Grammar & Conventions',passage:null,
+   q:"Which sentence uses the apostrophe correctly?",
+   choices:["The dog wagged it's tail excitedly.","The dogs' owner called them back.","The childrens' toys were scattered.","The cat licked it's paws."],ans:1,
+   expl:'"Dogs\'" = plural possessive (multiple dogs, one owner). "It\'s" = "it is" — not possessive. The possessive of "it" is "its" (no apostrophe). "Children\'s" is the correct irregular plural possessive.'},
+  {id:47,section:'rw',topic:'Grammar & Conventions',passage:null,
+   q:'Which sentence has correct subject-verb agreement?',
+   choices:['The team of players are warming up.','The team of players is warming up.','The number of complaints have increased.','Neither answer are correct.'],ans:1,
+   expl:'"Team" is a collective noun treated as singular in American English: "The team is."'},
+  {id:48,section:'rw',topic:'Grammar & Conventions',passage:null,
+   q:'Which sentence uses correct pronoun case?',
+   choices:['Between you and I, the project failed.','The award was given to she and her partner.','Him and his sister arrived late.','Between you and me, the project failed.'],ans:3,
+   expl:'After prepositions like "between," use object pronouns (me, him, her), not subject pronouns (I, he, she).'},
+  {id:49,section:'rw',topic:'Grammar & Conventions',passage:null,
+   q:'Which sentence uses a semicolon correctly?',
+   choices:['I love hiking; because it keeps me fit.','She studied all night; however, she still failed.','The movie was long; but entertaining.','We went to the store; bought milk.'],ans:1,
+   expl:'A semicolon joins two independent clauses. "She studied all night" and "she still failed" are both independent clauses. "However" is a conjunctive adverb, not a coordinating conjunction.'},
+  {id:50,section:'rw',topic:'Grammar & Conventions',passage:null,
+   q:'Which choice best corrects this run-on?\n"The team practiced every day they still lost the championship."',
+   choices:['The team practiced every day, but they still lost the championship.','The team practiced every day however they still lost the championship.','The team practiced every day; but they still lost the championship.','The team practiced every day, they still lost the championship.'],ans:0,
+   expl:'Two independent clauses need a comma + coordinating conjunction (FANBOYS) or a semicolon alone. Choice A correctly uses ", but."'},
+  {id:51,section:'rw',topic:'Grammar & Conventions',passage:null,
+   q:'Which sentence avoids a dangling modifier?',
+   choices:['Running down the street, the rain began to fall.','Running down the street, she got caught in the rain.','Running down the street, the umbrella was opened.','Running down the street, the thunder grew louder.'],ans:1,
+   expl:'"Running down the street" must modify the subject of the main clause. Only in B does "she" logically do the running.'},
+  {id:52,section:'rw',topic:'Grammar & Conventions',passage:null,
+   q:'Which sentence is correctly punctuated?',
+   choices:['The experiment which took three weeks yielded results.','The experiment, which took three weeks, yielded results.','The experiment which took three weeks, yielded results.','The experiment, which took three weeks yielded results.'],ans:1,
+   expl:'"Which took three weeks" is a non-restrictive clause (extra info, not needed to identify the subject). Non-restrictive clauses are set off by commas on both sides.'},
+  {id:53,section:'rw',topic:'Grammar & Conventions',passage:null,
+   q:'Choose the correct word: "She is _____ qualified than anyone else who applied."',
+   choices:['more','most','better','best'],ans:0,
+   expl:'When comparing one person to others, use the comparative form ("more"), not the superlative ("most").'},
+
+  // R&W › READING COMPREHENSION
+  {id:54,section:'rw',topic:'Reading Comprehension',
+   passage:'Urban heat islands occur when cities experience significantly higher temperatures than surrounding rural areas. Dark surfaces like roads and rooftops absorb more solar heat, while fewer trees mean less cooling through shade and evaporation. Studies show that urban centers can be 1 to 7 degrees Fahrenheit warmer than nearby rural regions.',
+   q:'What is the main purpose of this passage?',
+   choices:['To argue that cities should plant more trees','To explain why cities are warmer than surrounding areas','To warn about the dangers of climate change','To compare temperatures in different countries'],ans:1,
+   expl:'The passage explains the causes (dark surfaces, fewer trees) and extent (1–7°F) of the urban heat island effect.'},
+  {id:55,section:'rw',topic:'Reading Comprehension',
+   passage:'Urban heat islands occur when cities experience significantly higher temperatures than surrounding rural areas. Dark surfaces like roads and rooftops absorb more solar heat, while fewer trees mean less cooling through shade and evaporation. Studies show that urban centers can be 1 to 7 degrees Fahrenheit warmer than nearby rural regions.',
+   q:'According to the passage, which factor contributes to the urban heat island effect?',
+   choices:['Increased wind speeds in cities','More rainfall in urban centers','Dark surfaces that absorb heat','Higher elevation of city buildings'],ans:2,
+   expl:'The passage explicitly states: "Dark surfaces like roads and rooftops absorb more solar heat."'},
+  {id:56,section:'rw',topic:'Reading Comprehension',
+   passage:'Between 1950 and 2020, the global average temperature rose by approximately 1°C. While this may seem small, scientists warn that even a 2°C rise could lead to widespread coral bleaching, more frequent extreme weather events, and significant sea level rise affecting coastal communities worldwide.',
+   q:'Which conclusion is best supported by the passage?',
+   choices:['Climate change will be solved by 2050.','A small temperature increase can have large environmental consequences.','Coral reefs are the most important ecosystems on Earth.','Extreme weather events did not occur before 1950.'],ans:1,
+   expl:'The passage warns that a "small" 2°C rise could cause major environmental impacts, supporting the idea that small changes have large consequences.'},
+  {id:57,section:'rw',topic:'Reading Comprehension',
+   passage:'Despite smartphones becoming nearly universal, studies suggest that excessive screen time is linked to increased rates of anxiety and depression, particularly among teenagers. However, these same devices also connect young people to mental health resources, support communities, and emergency services.',
+   q:'This passage primarily presents:',
+   choices:['A one-sided argument against smartphones','A balanced view of smartphone use among teenagers','Evidence that smartphones cause depression','An argument for stricter phone regulations'],ans:1,
+   expl:'The passage presents both negatives (anxiety, depression) and positives (resources, support), making it a balanced view.'},
+  {id:58,section:'rw',topic:'Reading Comprehension',
+   passage:"The company's profits rose 15% last year despite a difficult economic environment. Revenue from international markets grew by 22%, more than offsetting a 5% decline in domestic sales.",
+   q:'Which of the following can be inferred from the passage?',
+   choices:['The company plans to close its domestic operations.','International growth more than compensated for domestic losses.','The economic environment improved last year.','Overall profits rose due to domestic sales growth.'],ans:1,
+   expl:'The passage states that international growth (22%) offset domestic decline (5%), resulting in overall profit growth. This directly supports choice B.'},
+  {id:59,section:'rw',topic:'Reading Comprehension',
+   passage:'The Harlem Renaissance, which flourished in the 1920s and 1930s, was a cultural movement centered in Harlem, New York. African American writers, musicians, and artists expressed pride in their cultural identity and challenged racial stereotypes. Figures such as Langston Hughes, Zora Neale Hurston, and Duke Ellington produced works that transformed American art and literature.',
+   q:'Which statement best describes the Harlem Renaissance according to the passage?',
+   choices:['It was primarily a political movement focused on voting rights.','It was centered in multiple cities across the United States.','It was a period of African American cultural achievement that shaped American arts.','It was a movement that began in the 1910s.'],ans:2,
+   expl:'The passage describes artists who "transformed American art and literature" — a period of cultural achievement. The passage specifies Harlem (not multiple cities) and the 1920s–1930s.'},
+  {id:60,section:'rw',topic:'Reading Comprehension',
+   passage:"Photosynthesis is the process by which plants convert sunlight, carbon dioxide, and water into glucose and oxygen. This process occurs primarily in the chloroplasts of plant cells, which contain the green pigment chlorophyll. Chlorophyll absorbs light energy, which drives the chemical reactions that produce glucose — the plant's primary energy source.",
+   q:'According to the passage, what role does chlorophyll play in photosynthesis?',
+   choices:['It produces glucose directly from carbon dioxide.','It stores oxygen produced during photosynthesis.','It absorbs light energy that drives the chemical reactions.','It converts water into carbon dioxide.'],ans:2,
+   expl:'The passage states: "chlorophyll absorbs light energy, which drives the chemical reactions that produce glucose."'},
+
+  // R&W › WRITING & RHETORIC
+  {id:61,section:'rw',topic:'Writing & Rhetoric',passage:null,
+   q:'Which revision makes this sentence most concise?\n"Due to the fact that it was raining, the game was cancelled."',
+   choices:['Because of the fact that rain occurred, the game was cancelled.','Because it was raining, the game was cancelled.','The game was cancelled, due to raining.','Rain had occurred and so the game was cancelled.'],ans:1,
+   expl:'"Due to the fact that" is wordy. "Because" says the same thing concisely.'},
+  {id:62,section:'rw',topic:'Writing & Rhetoric',passage:null,
+   q:'Which transition best completes this sentence?\n"Regular exercise improves cardiovascular health. ______, it can also boost mental well-being."',
+   choices:['However','Therefore','In addition','As a result'],ans:2,
+   expl:'The sentence adds a second benefit, so an additive transition ("In addition") is appropriate — not a contrast or causal transition.'},
+  {id:63,section:'rw',topic:'Writing & Rhetoric',passage:null,
+   q:'Which addition best supports this claim: "Many Americans do not get enough sleep."',
+   choices:['Sleep is important for good health.','According to the CDC, 1 in 3 American adults sleeps fewer than 7 hours per night.','Many doctors recommend sleeping 8 hours per night.','Teenagers often stay up too late using their phones.'],ans:1,
+   expl:'Specific statistics from a credible source (CDC) directly support the claim with concrete evidence. The other options are general statements.'},
+  {id:64,section:'rw',topic:'Writing & Rhetoric',passage:null,
+   q:'Which version most clearly and concisely expresses the idea?',
+   choices:['The reason why the bridge collapsed was because of the fact that the supports were weak.','The bridge collapsed because its supports were weak.','There is a reason the bridge collapsed which is that the supports were not strong.','The collapse of the bridge happened as a result of the supports not being strong.'],ans:1,
+   expl:'Choice B eliminates redundant phrases and states the idea directly. Strong writing favors clarity and brevity.'},
+  {id:65,section:'rw',topic:'Writing & Rhetoric',passage:null,
+   q:'A student is writing an essay arguing schools should start later. Which sentence best serves as a thesis statement?',
+   choices:['Many teenagers enjoy staying up late on weekends.','Schools have had early start times for over a century.','While later school start times may require schedule adjustments, the benefits to student health and academic performance make the change worthwhile.','Sleep is important for teenagers.'],ans:2,
+   expl:'A thesis makes a specific, arguable claim and previews reasoning. Choice C acknowledges a counterargument and states a clear position — the hallmarks of a strong thesis.'},
+  {id:66,section:'rw',topic:'Writing & Rhetoric',passage:null,
+   q:'Which sentence should be removed from a paragraph about the benefits of regular reading?',
+   choices:['Reading improves vocabulary and comprehension skills.','Regular readers tend to have greater empathy.','Public libraries have seen declining foot traffic in recent years.','Studies show reading before bed improves sleep quality.'],ans:2,
+   expl:'Declining library foot traffic is about library attendance — off-topic in a paragraph about benefits of reading.'},
+  {id:67,section:'rw',topic:'Writing & Rhetoric',passage:null,
+   q:'Which revision makes this sentence more appropriate for a formal academic essay?\n"A lot of people think that climate change is a big problem."',
+   choices:['Many experts regard climate change as a significant global challenge.','Climate change is really a huge issue for people everywhere.','People are kind of worried about the climate changing.','Climate change is something that bothers a lot of people.'],ans:0,
+   expl:'Academic writing requires formal language. Choice A replaces informal phrases with precise, formal alternatives.'}
+];
+
+// ─── APP STATE ────────────────────────────────────────────────────────────────
+const state = {
+  mode: null,        // 'practice' | 'test'
+  quizQs: [],
+  idx: 0,
+  userAns: [],       // chosen index per question, or null
+  revealed: false,   // practice mode: has current q been answered?
+  timerInterval: null,
+  timeLeft: 0,
+  history: JSON.parse(localStorage.getItem('sat_history') || '[]')
+};
+
+// ─── UTILS ───────────────────────────────────────────────────────────────────
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function fmt(sec) {
+  const m = Math.floor(sec / 60), s = sec % 60;
+  return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+
+function pct(correct, total) {
+  return total === 0 ? 0 : Math.round((correct / total) * 100);
+}
+
+function ringClass(p) {
+  if (p >= 80) return 'ring-great';
+  if (p >= 65) return 'ring-good';
+  if (p >= 50) return 'ring-ok';
+  return 'ring-low';
+}
+
+function scoreClass(p) {
+  if (p >= 80) return 'hs-great';
+  if (p >= 65) return 'hs-good';
+  if (p >= 50) return 'hs-ok';
+  return 'hs-low';
+}
+
+function saveHistory(entry) {
+  state.history.unshift(entry);
+  if (state.history.length > 50) state.history.pop();
+  localStorage.setItem('sat_history', JSON.stringify(state.history));
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ─── HOME ─────────────────────────────────────────────────────────────────────
+function goHome() {
+  document.getElementById('screen-home').innerHTML = `
+    <div class="hero">
+      <h1>SAT Prep</h1>
+      <p>Practice Math and Reading & Writing with real SAT-style questions and explanations.</p>
+    </div>
+    <div class="container" style="padding-top:0">
+      <div class="home-grid">
+        <div class="home-card" onclick="goPractice()">
+          <div class="icon">📚</div>
+          <h3>Practice by Topic</h3>
+          <p>Choose a specific topic, answer questions at your own pace, and see explanations after each one.</p>
+        </div>
+        <div class="home-card" onclick="goTest()">
+          <div class="icon">⏱️</div>
+          <h3>Timed Section Test</h3>
+          <p>Simulate the real SAT with a timed Math or Reading & Writing section. Review results at the end.</p>
+        </div>
+        <div class="home-card" onclick="goDashboard()">
+          <div class="icon">📊</div>
+          <h3>My Progress</h3>
+          <p>Track your scores over time and see which topics need the most work.</p>
+        </div>
+      </div>
+      <div style="background:var(--blue-light);border-radius:var(--r);padding:20px 24px;border:1px solid #c7d7f9">
+        <strong style="color:var(--blue-dark)">Digital SAT at a glance</strong>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;font-size:14px;color:var(--gray-700)">
+          <div>📝 <strong>Reading & Writing</strong> — 54 questions, 64 min</div>
+          <div>🔢 <strong>Math</strong> — 44 questions, 70 min</div>
+          <div>✅ All multiple choice (A–D)</div>
+          <div>📱 Computer-adaptive format</div>
+        </div>
+      </div>
+    </div>`;
+  showScreen('home');
+}
+
+// ─── PRACTICE SELECT ─────────────────────────────────────────────────────────
+function goPractice() {
+  const topics = [...new Set(Q.filter(q => q.section==='math').map(q=>q.topic))];
+  const rwTopics = [...new Set(Q.filter(q => q.section==='rw').map(q=>q.topic))];
+
+  function topicCard(t, sec) {
+    const cnt = Q.filter(q => q.topic===t).length;
+    const tag = sec==='math' ? 'tag-m' : 'tag-r';
+    const tagLabel = sec==='math' ? 'Math' : 'R&W';
+    return `<div class="topic-card" id="tc-${t.replace(/\s/g,'_')}" onclick="selectTopic('${t}','${sec}')">
+      <span class="topic-tag ${tag}">${tagLabel}</span>
+      <h4>${t}</h4>
+      <small>${cnt} questions</small>
+    </div>`;
+  }
+
+  document.getElementById('screen-select').innerHTML = `
+    <div class="container">
+      <button class="btn btn-secondary" onclick="goHome()" style="margin-bottom:18px">← Back</button>
+      <div class="page-title">Practice by Topic</div>
+      <div class="page-sub">Pick a topic below, then hit Start. Questions are shuffled each time.</div>
+      <div class="section-hdr">Math</div>
+      <div class="topic-grid">${topics.map(t=>topicCard(t,'math')).join('')}</div>
+      <div class="section-hdr">Reading & Writing</div>
+      <div class="topic-grid">${rwTopics.map(t=>topicCard(t,'rw')).join('')}</div>
+      <div style="margin-top:16px">
+        <button class="btn btn-primary btn-lg" id="start-btn" disabled onclick="startPractice()">Select a topic to start</button>
+      </div>
+    </div>`;
+  showScreen('select');
+  state._selectedTopic = null;
+  state._selectedSection = null;
+}
+
+function selectTopic(topic, section) {
+  document.querySelectorAll('.topic-card').forEach(c => c.classList.remove('sel'));
+  const key = topic.replace(/\s/g,'_');
+  document.getElementById('tc-' + key).classList.add('sel');
+  state._selectedTopic = topic;
+  state._selectedSection = section;
+  const btn = document.getElementById('start-btn');
+  btn.disabled = false;
+  btn.textContent = `Start "${topic}" Practice`;
+}
+
+function startPractice() {
+  if (!state._selectedTopic) return;
+  state.mode = 'practice';
+  state.quizQs = shuffle(Q.filter(q => q.topic === state._selectedTopic));
+  state.idx = 0;
+  state.userAns = new Array(state.quizQs.length).fill(null);
+  state.revealed = false;
+  renderQuiz();
+  showScreen('quiz');
+}
+
+// ─── TEST SELECT ─────────────────────────────────────────────────────────────
+function goTest() {
+  const mathCnt = Q.filter(q=>q.section==='math').length;
+  const rwCnt = Q.filter(q=>q.section==='rw').length;
+  document.getElementById('screen-select').innerHTML = `
+    <div class="container">
+      <button class="btn btn-secondary" onclick="goHome()" style="margin-bottom:18px">← Back</button>
+      <div class="page-title">Timed Section Test</div>
+      <div class="page-sub">No answer feedback until you finish. Results and full review at the end.</div>
+      <div class="test-grid">
+        <div class="test-card" onclick="startTest('math')">
+          <div class="topic-tag tag-m" style="margin-bottom:10px">Math</div>
+          <h3>Math Section</h3>
+          <p>Algebra, Advanced Math, Problem Solving & Data, Geometry & Trig</p>
+          <div class="meta">${mathCnt} questions · 70 minutes</div>
+        </div>
+        <div class="test-card" onclick="startTest('rw')">
+          <div class="topic-tag tag-r" style="margin-bottom:10px">Reading & Writing</div>
+          <h3>Reading & Writing Section</h3>
+          <p>Vocabulary, Grammar, Reading Comprehension, Writing & Rhetoric</p>
+          <div class="meta">${rwCnt} questions · 64 minutes</div>
+        </div>
+      </div>
+      <div style="background:var(--yellow-light);border-radius:10px;padding:14px 18px;border:1px solid #fde68a;font-size:14px;color:var(--gray-700)">
+        <strong>Tip:</strong> On the real Digital SAT you can skip questions and return. In this practice test, answer each question before moving on.
+      </div>
+    </div>`;
+  showScreen('select');
+}
+
+function startTest(section) {
+  state.mode = 'test';
+  state.quizQs = shuffle(Q.filter(q => q.section === section));
+  state.idx = 0;
+  state.userAns = new Array(state.quizQs.length).fill(null);
+  state.revealed = false;
+  state.timeLeft = section === 'math' ? 70*60 : 64*60;
+  renderQuiz();
+  showScreen('quiz');
+  startTimer();
+}
+
+// ─── QUIZ ─────────────────────────────────────────────────────────────────────
+function renderQuiz() {
+  const q = state.quizQs[state.idx];
+  const total = state.quizQs.length;
+  const progress = ((state.idx) / total) * 100;
+  const labels = ['A','B','C','D'];
+  const isPractice = state.mode === 'practice';
+
+  const timerHTML = state.mode === 'test'
+    ? `<span class="timer" id="timer-display">${fmt(state.timeLeft)}</span>` : '';
+
+  const passageHTML = q.passage
+    ? `<div class="passage">${q.passage}</div>` : '';
+
+  const choicesHTML = q.choices.map((c, i) => {
+    let cls = '';
+    if (isPractice && state.revealed) {
+      if (i === q.ans) cls = 'correct';
+      else if (i === state.userAns[state.idx]) cls = 'wrong';
+    } else if (!isPractice && state.userAns[state.idx] === i) {
+      cls = 'selected-test';
+    }
+    const disabled = (isPractice && state.revealed) ? 'disabled' : '';
+    return `<button class="choice ${cls}" onclick="selectAnswer(${i})" ${disabled}>
+      <span class="choice-lbl">${labels[i]}</span>
+      <span>${c}</span>
+    </button>`;
+  }).join('');
+
+  const explHTML = isPractice
+    ? `<div class="expl${state.revealed ? ' show' : ''}" id="expl-box">
+        <strong>Explanation:</strong> ${q.expl}
+       </div>` : '';
+
+  const nextLabel = state.idx < total - 1 ? 'Next →' : (isPractice ? 'See Results' : 'Finish Test');
+  const nextDisabled = (!isPractice && state.userAns[state.idx] === null) || (isPractice && !state.revealed) ? 'disabled' : '';
+
+  document.getElementById('screen-quiz').innerHTML = `
+    <div class="container">
+      <div class="quiz-header">
+        <div class="quiz-meta">
+          <span class="quiz-topic">${q.topic}</span>
+          <span class="quiz-counter">Question ${state.idx + 1} of ${total}</span>
+        </div>
+        ${timerHTML}
+      </div>
+      <div class="pbar"><div class="pfill" style="width:${progress}%"></div></div>
+      <div class="qcard">
+        ${passageHTML}
+        <div class="qtext">${q.q}</div>
+        <div class="choices">${choicesHTML}</div>
+        ${explHTML}
+      </div>
+      <div class="quiz-actions">
+        <button class="btn btn-secondary" onclick="goHome()">Quit</button>
+        <button class="btn btn-primary" id="next-btn" onclick="nextQuestion()" ${nextDisabled}>${nextLabel}</button>
+      </div>
+    </div>`;
+}
+
+function selectAnswer(i) {
+  const isPractice = state.mode === 'practice';
+  if (isPractice && state.revealed) return;
+  state.userAns[state.idx] = i;
+
+  if (isPractice) {
+    state.revealed = true;
+    renderQuiz();
+  } else {
+    // test mode: just highlight, enable next
+    renderQuiz();
+  }
+}
+
+function nextQuestion() {
+  if (state.idx < state.quizQs.length - 1) {
+    state.idx++;
+    state.revealed = false;
+    renderQuiz();
+  } else {
+    finishQuiz();
+  }
+}
+
+function finishQuiz() {
+  stopTimer();
+  const correct = state.quizQs.filter((q,i) => state.userAns[i] === q.ans).length;
+  const skipped = state.userAns.filter(a => a === null).length;
+  const p = pct(correct, state.quizQs.length);
+  saveHistory({
+    topic: state.mode === 'test'
+      ? (state.quizQs[0].section === 'math' ? 'Math Section Test' : 'R&W Section Test')
+      : state._selectedTopic,
+    date: new Date().toLocaleDateString(),
+    correct, total: state.quizQs.length, pct: p
+  });
+  renderResults();
+  showScreen('results');
+}
+
+// ─── TIMER ───────────────────────────────────────────────────────────────────
+function startTimer() {
+  stopTimer();
+  state.timerInterval = setInterval(() => {
+    state.timeLeft--;
+    const el = document.getElementById('timer-display');
+    if (el) {
+      el.textContent = fmt(state.timeLeft);
+      if (state.timeLeft <= 300) el.classList.add('urgent');
+    }
+    if (state.timeLeft <= 0) {
+      stopTimer();
+      finishQuiz();
+    }
+  }, 1000);
+}
+
+function stopTimer() {
+  if (state.timerInterval) { clearInterval(state.timerInterval); state.timerInterval = null; }
+}
+
+// ─── RESULTS ─────────────────────────────────────────────────────────────────
+function renderResults() {
+  const qs = state.quizQs;
+  const ans = state.userAns;
+  const correct = qs.filter((q,i) => ans[i] === q.ans).length;
+  const wrong = qs.filter((q,i) => ans[i] !== null && ans[i] !== q.ans).length;
+  const skipped = ans.filter(a => a === null).length;
+  const p = pct(correct, qs.length);
+  const rc = ringClass(p);
+  const labels = ['A','B','C','D'];
+
+  let msg = '';
+  if (p >= 80) msg = 'Excellent work! Keep it up!';
+  else if (p >= 65) msg = 'Good job! A bit more practice and you\'ll be there.';
+  else if (p >= 50) msg = 'Decent start — review the explanations below.';
+  else msg = 'Keep practicing — every session makes you better.';
+
+  const reviewHTML = qs.map((q,i) => {
+    const userAns = ans[i];
+    const isCorrect = userAns === q.ans;
+    const isSkip = userAns === null;
+    let cls = isSkip ? 'ri-skip' : (isCorrect ? 'ri-correct' : 'ri-wrong');
+    let badge = isSkip
+      ? '<span class="review-badge rb-skip">⚪ Skipped</span>'
+      : (isCorrect
+        ? '<span class="review-badge rb-correct">✓ Correct</span>'
+        : '<span class="review-badge rb-wrong">✗ Incorrect</span>');
+    const yourAns = isSkip ? '—' : labels[userAns];
+    const correctAns = labels[q.ans];
+    const passageHTML = q.passage
+      ? `<div class="passage" style="font-size:13px;margin-bottom:10px">${q.passage}</div>` : '';
+    return `<div class="review-item ${cls}">
+      ${badge}
+      ${passageHTML}
+      <div class="review-q">${q.q}</div>
+      <div class="review-answers">Your answer: <strong>${yourAns}</strong> &nbsp;·&nbsp; Correct: <strong>${correctAns}</strong> — ${q.choices[q.ans]}</div>
+      <div class="review-expl">${q.expl}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('screen-results').innerHTML = `
+    <div class="container">
+      <div class="results-top">
+        <div class="score-ring ${rc}">
+          <div class="score-pct">${p}%</div>
+          <div class="score-frac">${correct}/${qs.length}</div>
+        </div>
+        <h2 style="font-size:22px;margin-bottom:6px">${msg}</h2>
+        <div style="font-size:14px;color:var(--gray-600)">${state.mode==='test' ? 'Timed Test' : state._selectedTopic} &nbsp;·&nbsp; ${new Date().toLocaleDateString()}</div>
+        <div class="result-breakdown">
+          <div class="rb-item"><div class="rb-num c-num">${correct}</div><div class="rb-lbl">Correct</div></div>
+          <div class="rb-item"><div class="rb-num w-num">${wrong}</div><div class="rb-lbl">Incorrect</div></div>
+          <div class="rb-item"><div class="rb-num s-num">${skipped}</div><div class="rb-lbl">Skipped</div></div>
+        </div>
+        <div class="result-actions">
+          <button class="btn btn-secondary" onclick="goHome()">Home</button>
+          <button class="btn btn-outline" onclick="goDashboard()">View Progress</button>
+          ${state.mode==='practice'
+            ? `<button class="btn btn-primary" onclick="startPractice()">Try Again</button>`
+            : `<button class="btn btn-primary" onclick="goTest()">New Test</button>`}
+        </div>
+      </div>
+      <div class="section-hdr">Answer Review</div>
+      ${reviewHTML}
+    </div>`;
+}
+
+// ─── DASHBOARD ───────────────────────────────────────────────────────────────
+function goDashboard() {
+  const h = state.history;
+  const totalSessions = h.length;
+  const totalQ = h.reduce((s,e) => s + e.total, 0);
+  const totalCorrect = h.reduce((s,e) => s + e.correct, 0);
+  const overallPct = pct(totalCorrect, totalQ);
+
+  const statsHTML = `
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-num">${totalSessions}</div><div class="stat-lbl">Sessions completed</div></div>
+      <div class="stat-card"><div class="stat-num">${totalQ}</div><div class="stat-lbl">Questions answered</div></div>
+      <div class="stat-card"><div class="stat-num">${overallPct}%</div><div class="stat-lbl">Overall accuracy</div></div>
+    </div>`;
+
+  const histHTML = h.length === 0
+    ? `<div class="empty"><div class="e-icon">📋</div><p>No sessions yet — start practicing!</p></div>`
+    : h.map(e => {
+        const sc = scoreClass(e.pct);
+        return `<div class="hist-item">
+          <div class="hist-info">
+            <div class="hist-topic">${e.topic}</div>
+            <div class="hist-date">${e.date}</div>
+          </div>
+          <span class="hist-score ${sc}">${e.pct}% (${e.correct}/${e.total})</span>
+        </div>`;
+      }).join('');
+
+  document.getElementById('screen-dashboard').innerHTML = `
+    <div class="container">
+      <div class="page-title">My Progress</div>
+      <div class="page-sub">Your last ${Math.min(h.length,50)} sessions.</div>
+      ${statsHTML}
+      <div class="section-hdr">Recent Sessions</div>
+      ${histHTML}
+      ${h.length > 0 ? `<button class="btn btn-secondary" style="margin-top:16px" onclick="clearHistory()">Clear History</button>` : ''}
+    </div>`;
+  showScreen('dashboard');
+}
+
+function clearHistory() {
+  if (confirm('Clear all history? This cannot be undone.')) {
+    state.history = [];
+    localStorage.removeItem('sat_history');
+    goDashboard();
+  }
+}
+
+// ─── INIT ────────────────────────────────────────────────────────────────────
+goHome();
+</script>
+</body>
+</html>
